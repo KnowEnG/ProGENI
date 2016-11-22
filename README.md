@@ -19,4 +19,7 @@ In order to run the code, you need to have Python 3.5 installed. In addition, th
 - [Sklearn (scikit-learn)](http://scikit-learn.org/stable/)
 Instead of installing all these libraries independently, you can use prebulit Python distributions such as [Anaconda](https://www.continuum.io/downloads), which provides a free academic subscription.
 
+# Input files
 
+ProGENI requires three files as input.
+1- 
