@@ -46,8 +46,8 @@ Example phenotype file:
 |  | sample_1 | sample_2 | sample_3 |
 | :--- | :--- | :--- | :--- |
 | drug_1 | 0.65 | 0.12 | 1.45 |  
-| drug_1 | 1.67 | 1.34 | 2.45 |
-| drug_1 | 0.51 | 0.56 | 0.34 |
+| drug_2 | 1.67 | NA | 2.45 |
+| drug_3 | 0.51 | 0.56 | 0.34 |
 
 
 #### Network edge file:
