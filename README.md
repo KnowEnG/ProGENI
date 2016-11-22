@@ -8,7 +8,7 @@ Identification of genes whose basal mRNA expression can predict a phenotype (e.g
 
 The figure below depcits the method overview in the context of drug response. 
 
-![Method Overview](https://github.com/KnowEnG/ProGENI/blob/master/Pipeline_ProGENI_a.pdf)
+![Method Overview](Pipeline_ProGENI_a.pdf)
 
 # Data Preparation
 
