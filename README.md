@@ -1,2 +1,2 @@
 # ProGENI
-Prioritization of Genes Enhanced with Network Information
+## Prioritization of Genes Enhanced with Network Information
