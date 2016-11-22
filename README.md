@@ -21,5 +21,6 @@ Instead of installing all these libraries independently, you can use prebulit Py
 
 # Input files
 
-ProGENI requires three files as input.
-1- 
+ProGENI requires three files as input:
+- Gene expression (features) file: This is a genes x samples csv file where the first column contains name of genes and the first row contains name/IDs of the samples. ProGENI assumes that the expression of each gene (across all samples) follows a normal distribution. As a result, we recommend you perform proper transformation on your expression data (e.g. log2 transform on microarray data) to satsify this condition for best results. NAs are not allowed in this file. 
+- Phenotype (response) file: This is a phenotype x samples csv file where the first column contains name of different phenotypes (e.g. different drugs) and the first row contains name/IDs of the samples. Make sure that the samples are ordered the same as the gene expression file (i.e. the first row of both files hould be identical). NAs are allowed in this file. 
