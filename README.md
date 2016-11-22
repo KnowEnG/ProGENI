@@ -64,3 +64,8 @@ Example network edge file:
 | G4 | G5 | 444 |
 
 
+# Running ProGENI
+### With default settings
+
+
+### With advanced settings
