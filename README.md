@@ -41,6 +41,15 @@ Example Gene expression file:
 #### Phenotype (response) file:
 This is a phenotype x samples csv file where the first column contains name of different phenotypes (e.g. different drugs) and the first row contains name/IDs of the samples. Make sure that the samples are ordered the same as the gene expression file (i.e. the first row of both files hould be identical). NAs are allowed in this file. 
 
+Example phenotype file:
+
+|  | sample_1 | sample_2 | sample_3 |
+| :--- | :--- | :--- | :--- |
+| drug_1 | 0.65 | 0.12 | 1.45 |  
+| drug_1 | 1.67 | 1.34 | 2.45 |
+| drug_1 | 0.51 | 0.56 | 0.34 |
+
+
 #### Network edge file:
 This is a csv file which contains information on gene-gene interactions. The first should be the header of the file. The network should be represented as a three-column format where each edge in the network is represented as a row in the file: the first two columns contain name of genes and the third column shows the (positive) weight (e.g. representing confidence) corresponding to this relationship. If the set of genes in the network is slightly different from the set of genes in the gene expression data, ProGENI will focus on the intersection of the genes.  
 
