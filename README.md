@@ -30,9 +30,10 @@ ProGENI requires three files as input:
 Example network edge file:
 ```
 node_1  node_2  weight
-G1	    G6	    0.76
-G2	    G1	    0.41
-G2	    G7	    0.73
-G4	    G5	    0.89
+G1	    G4	    0.76
+G1      G6      0.24
+G2	    G1	    0.45
+G2	    G7	    0.55
+G4	    G5	    0.23
 ```
 
