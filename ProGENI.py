@@ -85,9 +85,14 @@ def parse_args():
 ###############################################################################
 def rank_aggregate_borda(list_of_list, method):
     """
-    This function receives a list of list of genes and a number k. The genes are
-    ranked based on Borda's method. Final output
-    is an aggregated ranked list of k genes.
+    This function receives a list of list of genes and a method. The genes are
+    ranked based on Borda's method. Final output is an aggregated ranked list of 
+    genes. 
+    Input: 
+        list_of_list: a list of list of genes
+        method: "arithmetic_mean" or "geometric_mean"
+    Output: 
+        ranked list of genes where the first gene has the highest rank
     """
     dic_tmp = {key:[] for key in list_of_list[0]} #A dictionary with keys being gene names
     list_length = len(list_of_list[0])
@@ -127,6 +132,13 @@ def spread_match_network(expr_df_in, node_names_in):
     expr_df_in. Also, node_names_out is formed by reshuffling node_names_in. The
     intersection of node_names_out and column names of expr_df_out are placed at
     the beginning of both lists.
+    Input: 
+        expr_df_in: A pandas dataframe corresponding to gene expression 
+        node_names_in: Name of the nodes in the network
+    Output: 
+        expr_df_out: Reorganized dataframe of gene expressions
+        nodes_names_out: Reordered node names
+        nodes_genes_intersect: Sorted list of shared genes
     """
     node_names_in_set = set(node_names_in)
     gene_names_in_set = set(expr_df_in.columns.values)
@@ -144,7 +156,21 @@ def spread_match_network(expr_df_in, node_names_in):
 
 ###############################################################################
 def rwr_matrix(node_names, network_matrix, restart_matrix, restart_prob, max_iter, tolerance):
-    """Performs a RWR (Random Walk with Restart) with the given parameters"""
+    """
+    Performs a RWR (Random Walk with Restart) with the given parameters on a
+    matrix input. 
+    Input: 
+        node_names: Name of the nodes in the network
+        network_matrix: The probability transition matrix of the network (symmetric)
+        restart_matrix: The matrix representing the restart set
+        restart_prob: Probability of restart
+        max_iter: Maximum number of iterations for convergence
+        tolerance: The threshold used with the residual to determine convergence 
+    Output:
+        num_iter_tmp: Actual number of iterations performed
+        residual: The final value of residual
+        steady_prob_new: The equlibrium distributions
+    """
     no_restart_prob = 1 - restart_prob
     init_prob = 1/len(node_names)
     # Create the vector of probabilities for the nodes
@@ -164,8 +190,21 @@ def rwr_matrix(node_names, network_matrix, restart_matrix, restart_prob, max_ite
 
 ###############################################################################
 def rwr_vec(node_names, network_matrix, restart_vec, restart_prob, max_iter, tolerance):
-    """Performs a RWR (Random Walk with Restart) with the given parameters"""
-    # Get the number of nodes
+    """
+    Performs a RWR (Random Walk with Restart) with the given parameters on a
+    vector input. 
+    Input: 
+        node_names: Name of the nodes in the network
+        network_matrix: The probability transition matrix of the network (symmetric)
+        restart_vec: The vector representing the restart set
+        restart_prob: Probability of restart
+        max_iter: Maximum number of iterations for convergence
+        tolerance: The threshold used with the residual to determine convergence 
+    Output:
+        num_iter_tmp: Actual number of iterations performed
+        residual: The final value of residual
+        steady_prob_new: The equlibrium distribution
+    """    # Get the number of nodes
     num_nodes = len(node_names)
     no_restart_prob = 1 - restart_prob
     # Compute the initial probability for the nodes
@@ -189,9 +228,13 @@ def rwr_vec(node_names, network_matrix, restart_vec, restart_prob, max_iter, tol
 
 ###############################################################################
 def import_network(address_net, delimiter):
-    """Imports the network and generates a dataframe """
+    """
+    Imports the network and generates a dataframe.
+    Input:
+        address_net: The address of the network
+        delimiter: The delimiter used to import the network            
+    """
     default_column_headers = ['n_alias_1', 'n_alias_2', 'weight', 'type']
-    delimiter = ','
     # Step 1: Read the input
     # the input_file is the network
     with open(address_net, 'r') as fin:
@@ -210,7 +253,7 @@ def import_network(address_net, delimiter):
     node1 = net_df.columns[0]
     node2 = net_df.columns[1]
     weight = net_df.columns[2]
-    #        t = net_df.columns[3]
+    #t = net_df.columns[3]
 
     # Get the unique nodes -- the first two columns of the input data,
     # converted to sets to remove duplicates, union'ed, then sorted
