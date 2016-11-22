@@ -27,6 +27,7 @@ ProGENI requires three files as input:
 This is a genes x samples csv file where the first column contains name of genes and the first row contains name/IDs of the samples. ProGENI assumes that the expression of each gene (across all samples) follows a normal distribution. As a result, we recommend you perform proper transformation on your expression data (e.g. log2 transform on microarray data) to satsify this condition for best results. NAs are not allowed in this file. 
 
 Example Gene expression file:
+
 |  | sample_1 | sample_2 | sample_3 |
 | :--- | :--- | :--- | :--- |
 | G1 | 0.24 | 0.67 | 2.12 |  
@@ -44,6 +45,7 @@ This is a phenotype x samples csv file where the first column contains name of d
 This is a csv file which contains information on gene-gene interactions. The first should be the header of the file. The network should be represented as a three-column format where each edge in the network is represented as a row in the file: the first two columns contain name of genes and the third column shows the (positive) weight (e.g. representing confidence) corresponding to this relationship. If the set of genes in the network is slightly different from the set of genes in the gene expression data, ProGENI will focus on the intersection of the genes.  
 
 Example network edge file:
+
 | node_1 | node_2 | weight |
 | :--- | :--- | :--- |
 | G1 | G4 | 777 |
