@@ -26,11 +26,22 @@ ProGENI requires three files as input:
 #### Gene expression (features) file:
 This is a genes x samples csv file where the first column contains name of genes and the first row contains name/IDs of the samples. ProGENI assumes that the expression of each gene (across all samples) follows a normal distribution. As a result, we recommend you perform proper transformation on your expression data (e.g. log2 transform on microarray data) to satsify this condition for best results. NAs are not allowed in this file. 
 
+Example Gene expression file:
+```
+        sample_1  sample_2  sample_3
+G1	    0.24	    0.67      2.12      
+G2      0.34      -1.34     0.45
+G3	    1.51	    0.05      -0.22
+G4	    0.03	    0.55      1.15
+G5 	    -0.23	    0.23      0.55
+G6      0.94      0.33      1.12
+```
+
 #### Phenotype (response) file:
 This is a phenotype x samples csv file where the first column contains name of different phenotypes (e.g. different drugs) and the first row contains name/IDs of the samples. Make sure that the samples are ordered the same as the gene expression file (i.e. the first row of both files hould be identical). NAs are allowed in this file. 
 
 #### Network edge file:
-This is a csv file which contains information on gene-gene interactions. The first should be the header of the file. The network should be represented as a three-column format where each edge in the network is represented as a row in the file: the first two columns contain name of genes and the third column shows the weight (e.g. representing confidence) corresponding to this relationship. For example an edge between gene_1 and gene_2 can be represented as a row 'gene_1, gene_2, 0.6' in the file. If your network is not weighted, simply put 1 in the third column for all edges. 
+This is a csv file which contains information on gene-gene interactions. The first should be the header of the file. The network should be represented as a three-column format where each edge in the network is represented as a row in the file: the first two columns contain name of genes and the third column shows the weight (e.g. representing confidence) corresponding to this relationship. If the set of genes in the network is slightly different from the set of genes in the gene expression data, ProGENI will focus on the intersection of the genes.  
 
 Example network edge file:
 ```
