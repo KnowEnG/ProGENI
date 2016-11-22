@@ -29,11 +29,11 @@ This is a genes x samples csv file where the first column contains name of genes
 Example Gene expression file:
 ```
         sample_1  sample_2  sample_3
-G1	    0.24	    0.67      2.12      
+G1	0.24	  0.67      2.12      
 G2      0.34      -1.34     0.45
-G3	    1.51	    0.05      -0.22
-G4	    0.03	    0.55      1.15
-G5 	    -0.23	    0.23      0.55
+G3	1.51	  0.05      -0.22
+G4	0.03	  0.55      1.15
+G5 	-0.23	  0.23      0.55
 G6      0.94      0.33      1.12
 ```
 
@@ -46,10 +46,10 @@ This is a csv file which contains information on gene-gene interactions. The fir
 Example network edge file:
 ```
 node_1  node_2  weight
-G1	    G4	    0.76
+G1	G4	0.76
 G1      G6      0.24
-G2	    G1	    0.45
-G2	    G7	    0.55
-G4	    G5	    0.23
+G2	G1	0.45
+G2	G7	0.55
+G4	G5	0.23
 ```
 
