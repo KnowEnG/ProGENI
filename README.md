@@ -10,5 +10,8 @@ The figure below depcits the method overview in the context of drug response.
 
 ![Method Overview](/images/Pipeline_ProGENI.png)
 
-# Data Preparation
+# Requirements
+
+In order to run the code, you need to have Python 3 installed. In addition, the code uses the following python modules which need to be installed:
+- numpy
 
