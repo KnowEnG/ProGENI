@@ -12,6 +12,11 @@ The figure below depcits the method overview in the context of drug response.
 
 # Requirements
 
-In order to run the code, you need to have Python 3 installed. In addition, the code uses the following python modules which need to be installed:
-- numpy
+In order to run the code, you need to have Python 3.5 installed. In addition, the code uses the following python modules/libraries which need to be installed:
+- Numpy
+- Scipy
+- Pandas
+- Sklearn (scikit-learn)
+Instead of installing all these libraries independently, you can use prebulit Python distributions such as [Anaconda](https://www.continuum.io/downloads), which provides a free academic subscription.
+
 
