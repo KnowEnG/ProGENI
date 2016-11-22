@@ -1,13 +1,7 @@
 #!/usr/bin/env python
 
 """
-THIS IS THE FINAL VERSION
-Summary: 1- Gene prioritization using RWR 2- Predict with SVR using expression of top genes
-
-Description: In this script, the goal is to rank all the genes based on how well
-they can predict drug response sensitivity across individuals. We use feature
-engineering (FE) as explained below:
-
+Implementation fo ProGENI
 """
 import os
 import sys
