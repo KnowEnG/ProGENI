@@ -7,6 +7,7 @@ import os
 import sys
 import argparse
 import time
+import warnings
 import numpy as np
 from numpy import mean
 import pandas as pd
@@ -15,7 +16,7 @@ from scipy import sparse
 from scipy.stats.mstats import zscore
 from scipy.stats.mstats import gmean
 from sklearn.preprocessing import normalize
-
+from scipy.sparse import SparseEfficiencyWarning
 
 # pylint: disable=no-member
 ###############################################################################
@@ -29,7 +30,12 @@ def parse_args():
         argparse.Namespace: the parsed arguments
     """
     parser = argparse.ArgumentParser()
-
+    parser.add_argument('input_expression', type=str,
+                        help='name of the file containg expression data')
+    parser.add_argument('input_response', type=str,
+                        help='name of the file containg response data')
+    parser.add_argument('input_network', type=str,
+                        help='name of the file containg network data')
     parser.add_argument('-s', '--seed', type=int, default=1011,
                         help='seed used for random generator')
     parser.add_argument('-nr', '--num_RCG', type=int, default=100,
@@ -46,30 +52,21 @@ def parse_args():
                         help='number of bootstrap samplings')
     parser.add_argument('-pb', '--percent_bootstrap', type=int, default=100,
                         help='percent of samples for bootstrap samplinga (between 0-100)')
-
-    #Needs to be updated:
     parser.add_argument('-de', '--directory_expression', type=str,
-                        default='/Users/emad2/Amin_Research/Drug_Response/GDSCData',
+                        default='./',
                         help='directory containing expression data')
     parser.add_argument('-dr', '--directory_response', type=str,
-                        default='/Users/emad2/Amin_Research/Drug_Response/GDSCData',
+                        default='./',
                         help='directory containing response data')
     parser.add_argument('-dn', '--directory_network', type=str,
-                        default='/Users/emad2/Amin_Research/Drug_Response/KN',
+                        default='./',
                         help='directory containing network data')
     parser.add_argument('-do', '--directory_out', type=str,
-                        default='/Users/emad2/Downloads',
+                        default='./',
                         help='directory for the results')
-    parser.add_argument('-ie', '--input_expression', type=str,
-                        default='GDSC_expr_ensembl.tsv',
-                        help='name of the file containg expression data')
-    parser.add_argument('-ir', '--input_response', type=str,
-                        default='GDSC_cpd_ic50_sorted.tsv',
-                        help='name of the file containg response data')
-    parser.add_argument('-in', '--input_network', type=str,
-                        default='STRING_experimental_small_test.csv',
-                        help='name of the file containg network data')
-
+    parser.add_argument('-o', '--output', type=str,
+                        default='results.csv',
+                        help='name of the file containg the results')
     args = parser.parse_args()
     return args
 
@@ -175,7 +172,7 @@ def rwr_matrix(node_names, network_matrix, restart_matrix, restart_prob, max_ite
                             * no_restart_prob + restart_prob \
                             * restart_matrix)
         residual = max(abs(steady_prob_new - steady_prob_old).sum(axis=1))
-        print('RWR_iteration = ', num_iter_tmp)
+        print('iteration = ', num_iter_tmp)
         num_iter_tmp += 1
         steady_prob_old = steady_prob_new.copy()
     return(num_iter_tmp, residual, steady_prob_new)
@@ -285,10 +282,11 @@ def gen_network_matrix(num_nodes, net_df, node1, node2, weight, node2index):
 ###############################################################################
 
 def main():
-    """The main function of ProGENI"""
+    """The main part of ProGENI"""
+    warnings.simplefilter('ignore',SparseEfficiencyWarning)
     ###############################################################################
     args = parse_args()
-
+    
     n_rcg = args.num_RCG
     restart_prob_trans = args.prob_restart_trans
     restart_prob = args.prob_restart_rank
@@ -299,22 +297,17 @@ def main():
     address_expr = os.path.join(args.directory_expression, args.input_expression)
     address_response = os.path.join(args.directory_response, args.input_response)
     address_net = os.path.join(args.directory_network, args.input_network)
+    address_out = os.path.join(args.directory_out, args.output)
 
-
-    #output_dir = args.directory_out
-
-
-
-    expr_df = pd.read_csv(address_expr, sep='\t', header=0, index_col=0).T
+    expr_df = pd.read_csv(address_expr, sep=',', header=0, index_col=0).T
     delimiter_net = ','
-
     (node_names, net_df, node1, node2, weight) = import_network(address_net, delimiter_net)
-
+    
     ###############################################################################
     # Reorder gene column names of expression spreadsheet and gene node names of network
     # such that both name lists start with the intersection of the two list ordered alphabetically
     (expr_df, node_names, nodes_genes_intersect) = spread_match_network(expr_df, node_names)
-
+    
     expr_all = zscore(expr_df.values, axis=0)
     gene_names = list(expr_df.columns.values)
     if len(set(gene_names)) != len(gene_names):
@@ -324,44 +317,43 @@ def main():
     index2node = node_names.copy()
     #    index2gene = gene_names.copy()
     num_nodes = len(node_names)
-
+    
     ###############################################################################
     #Perform network transformation on the gene expression matrix
     (net_df, network_matrix) = \
         gen_network_matrix(num_nodes, net_df, node1, node2, weight, node2index)
     restart_matrix = np.eye(len(node_names), len(nodes_genes_intersect)).T
+    print('Obtaining the network')
     (num_iter, residual, gene_similarity_smooth) = \
         rwr_matrix(node_names, network_matrix, restart_matrix, restart_prob_trans, max_iter, tolerance)
     gene_similarity_smooth = gene_similarity_smooth[:, 0:np.size(gene_similarity_smooth, axis=0)]
     gene_similarity_smooth = normalize(gene_similarity_smooth, norm='l1', axis=1)
     expr_all = zscore(expr_all[:, 0:len(nodes_genes_intersect)].dot(gene_similarity_smooth.T), axis=0)
-
-
+    
+    
     ###############################################################################
     ###############################################################################
-    response_df = pd.read_csv(address_response, sep='\t', header=0, index_col=0).T
+    response_df = pd.read_csv(address_response, sep=',', header=0, index_col=0).T
     response_all = response_df.values
     names_drug = list(response_df.columns.values)
     n_drug = len(names_drug)
-
-
-
+    
     start = time.clock()
     ranked_genes = {}       # Genes ranked such that the most important gene is first
     name_drug_final = []
     aggr_ranked_genes = {}
     # list of interest for drugs:
-    drug_interest = set(names_drug)    #this option keeps all the drugs
-    #drug_interest = set(['Cisplatin', 'Doxorubicin'])
-
-
+    #drug_interest = set(names_drug)    #this option keeps all the drugs
+    drug_interest = set(['Cisplatin', 'Doxorubicin', '17-AAG'])
+    
+    
     #######################################################################
     #Obtain global equilibrium distribution of the nodes
     restart_vec = np.ones(len(node_names)) / len(node_names)
     (num_iter, residual, steady_prob_new_global) = \
         rwr_vec(node_names, network_matrix, restart_vec, restart_prob, max_iter, tolerance)
     print(num_iter, residual)
-
+    
     for i_d in range(n_drug):
         if names_drug[i_d] not in drug_interest:
             continue
@@ -372,7 +364,7 @@ def main():
         y_response = y_response[label_not_nan]
         if len(y_response) < 2:
             continue
-
+    
         name_drug_final.append(names_drug[i_d])
         expr_matrix = expr_all[label_not_nan,]
         n_sample = len(label_not_nan)
@@ -383,7 +375,7 @@ def main():
             sample_permute = np.random.permutation(range(n_sample))
             label_train = sorted(sample_permute[np.arange(0, n_train)])
             print('response =', names_drug[i_d], 'repeat =', k)
-
+    
             y_train = y_response[label_train]
             expr_matrix_train = expr_matrix[label_train,]
             #######################################################################
@@ -403,7 +395,7 @@ def main():
                     restart_vec[node2index[gene_names[label_feat_seed[i]]]] = \
                         cor_all[label_feat_seed[i]]
             restart_vec /= restart_vec.sum()
-
+    
             (num_iter, residual, steady_prob_new_drug) = \
                 rwr_vec(node_names, network_matrix, restart_vec,
                         restart_prob, max_iter, tolerance)
@@ -413,10 +405,13 @@ def main():
             #Ranked gene names with the same order as above line except that
             #it removes genes not in the gene expression dataset
             ranked_names = [index2node[i] for i in ranked_nodes if index2node[i] in gene_names]
-
+    
             ranked_genes[names_drug[i_d]].append(ranked_names)
-            aggr_ranked_genes[names_drug[i_d]] = \
-                rank_aggregate_borda(ranked_genes[names_drug[i_d]], 'geometric_mean')
+        
+        aggr_ranked_genes[names_drug[i_d]] = \
+            rank_aggregate_borda(ranked_genes[names_drug[i_d]], 'geometric_mean')
+        aggr_ranked_genes_df = pd.DataFrame(data=aggr_ranked_genes, index=None, columns=drug_interest)
+        aggr_ranked_genes_df.to_csv(address_out, sep=',')
 
     end_alg = time.clock()
     print(end_alg-start)
