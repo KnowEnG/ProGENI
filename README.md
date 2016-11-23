@@ -62,9 +62,7 @@ Example network edge file:
 | G2 | G4 | 999 |
 | G2 | G7 | 131 |
 | G4 | G5 | 444 |
-
-### Sample inputs and outputs:
-To test whether ProGENI runs as expected on your machine, you can use the sample inputs in the folder "sample_data" and run ProGENI with default settings and compare the results with the file "results_sample.csv" in the same folder. Please note that the network used in the manuscript can be obtained from "9606.protein.links.detailed.v10.txt.gz" and downloaded from the [STRING database](http://string-db.org/cgi/download.pl?UserId=jQZ9rmKZ7UaW&sessionId=scBzK1XjdBol&species_text=Homo+sapiens). The gene expression and drug response datasets used in the mansucript are also publically available (see the accompanying paper for more details). 
+ 
 
 # Running ProGENI
 ### With default settings
@@ -97,3 +95,8 @@ For example, to run Robust-ProGENI with 80% bootstrap sampling and 50 times repe
 ```
 python3 ProGENI.py gene_expr.csv phenotype.csv network.csv -o results_80_50.csv -nb 50 -pb 80
 ```
+
+### Sample inputs and outputs:
+To test whether ProGENI runs as expected on your machine, you can use the sample inputs in the folder "sample_data" and run ProGENI with num_RCG=2 (see running and other arguments set with default values. The results should match the file "results_sample.csv". 
+
+Please note that the network used in the manuscript can be obtained from "9606.protein.links.detailed.v10.txt.gz" and downloaded from the [STRING database](http://string-db.org/cgi/download.pl?UserId=jQZ9rmKZ7UaW&sessionId=scBzK1XjdBol&species_text=Homo+sapiens). The gene expression and drug response datasets used in the mansucript are also publically available (see the accompanying paper for more details).
