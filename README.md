@@ -64,7 +64,7 @@ Example network edge file:
 | G4 | G5 | 444 |
 
 ### Sample inputs and outputs:
-To test whether ProGENI runs as expected on your machine, you can use the sample inputs in the folder "sample_data" and run ProGENI with default settings and compare the results with the file "results_sample.csv" in the same folder. Please ntoe that the datasets (including the network) used in the mansucript are publically available (see the accompanying paper for more details). 
+To test whether ProGENI runs as expected on your machine, you can use the sample inputs in the folder "sample_data" and run ProGENI with default settings and compare the results with the file "results_sample.csv" in the same folder. Please note that the network used in the manuscript can be obtained from "9606.protein.links.detailed.v10.txt.gz" and downloaded from the [STRING database](http://string-db.org/cgi/download.pl?UserId=jQZ9rmKZ7UaW&sessionId=scBzK1XjdBol&species_text=Homo+sapiens). The gene expression and drug response datasets used in the mansucript are also publically available (see the accompanying paper for more details). 
 
 # Running ProGENI
 ### With default settings
