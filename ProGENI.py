@@ -6,7 +6,7 @@ Implementation fo ProGENI
 import os
 import sys
 import argparse
-import time
+#import time
 import warnings
 import numpy as np
 from numpy import mean
@@ -15,8 +15,9 @@ import scipy.stats as ss
 from scipy import sparse
 from scipy.stats.mstats import zscore
 from scipy.stats.mstats import gmean
-from sklearn.preprocessing import normalize
 from scipy.sparse import SparseEfficiencyWarning
+from sklearn.preprocessing import normalize
+
 
 # pylint: disable=no-member
 ###############################################################################
@@ -75,12 +76,12 @@ def parse_args():
 def rank_aggregate_borda(list_of_list, method):
     """
     This function receives a list of list of genes and a method. The genes are
-    ranked based on Borda's method. Final output is an aggregated ranked list of 
-    genes. 
-    Input: 
+    ranked based on Borda's method. Final output is an aggregated ranked list of
+    genes.
+    Input:
         list_of_list: a list of list of genes
         method: "arithmetic_mean" or "geometric_mean"
-    Output: 
+    Output:
         ranked list of genes where the first gene has the highest rank
     """
     dic_tmp = {key:[] for key in list_of_list[0]} #A dictionary with keys being gene names
@@ -121,10 +122,10 @@ def spread_match_network(expr_df_in, node_names_in):
     expr_df_in. Also, node_names_out is formed by reshuffling node_names_in. The
     intersection of node_names_out and column names of expr_df_out are placed at
     the beginning of both lists.
-    Input: 
-        expr_df_in: A pandas dataframe corresponding to gene expression 
+    Input:
+        expr_df_in: A pandas dataframe corresponding to gene expression
         node_names_in: Name of the nodes in the network
-    Output: 
+    Output:
         expr_df_out: Reorganized dataframe of gene expressions
         nodes_names_out: Reordered node names
         nodes_genes_intersect: Sorted list of shared genes
@@ -147,14 +148,14 @@ def spread_match_network(expr_df_in, node_names_in):
 def rwr_matrix(node_names, network_matrix, restart_matrix, restart_prob, max_iter, tolerance):
     """
     Performs a RWR (Random Walk with Restart) with the given parameters on a
-    matrix input. 
-    Input: 
+    matrix input.
+    Input:
         node_names: Name of the nodes in the network
         network_matrix: The probability transition matrix of the network (symmetric)
         restart_matrix: The matrix representing the restart set
         restart_prob: Probability of restart
         max_iter: Maximum number of iterations for convergence
-        tolerance: The threshold used with the residual to determine convergence 
+        tolerance: The threshold used with the residual to determine convergence
     Output:
         num_iter_tmp: Actual number of iterations performed
         residual: The final value of residual
@@ -181,14 +182,14 @@ def rwr_matrix(node_names, network_matrix, restart_matrix, restart_prob, max_ite
 def rwr_vec(node_names, network_matrix, restart_vec, restart_prob, max_iter, tolerance):
     """
     Performs a RWR (Random Walk with Restart) with the given parameters on a
-    vector input. 
-    Input: 
+    vector input.
+    Input:
         node_names: Name of the nodes in the network
         network_matrix: The probability transition matrix of the network (symmetric)
         restart_vec: The vector representing the restart set
         restart_prob: Probability of restart
         max_iter: Maximum number of iterations for convergence
-        tolerance: The threshold used with the residual to determine convergence 
+        tolerance: The threshold used with the residual to determine convergence
     Output:
         num_iter_tmp: Actual number of iterations performed
         residual: The final value of residual
@@ -221,7 +222,7 @@ def import_network(address_net, delimiter):
     Imports the network and generates a dataframe.
     Input:
         address_net: The address of the network
-        delimiter: The delimiter used to import the network            
+        delimiter: The delimiter used to import the network
     """
     default_column_headers = ['n_alias_1', 'n_alias_2', 'weight', 'type']
     # Step 1: Read the input
@@ -254,9 +255,8 @@ def import_network(address_net, delimiter):
     #print(node_names)
 
     # Output some info about the input data
-    print("Input:")
-    print("Lines of data:", len(net_df))
-    print("Number of unique nodes:", num_nodes)
+    print("Number of rows in the network file:", len(net_df))
+    print("Number of unique nodes in the network:", num_nodes)
 
     return(node_names, net_df, node1, node2, weight)
 
@@ -283,10 +283,10 @@ def gen_network_matrix(num_nodes, net_df, node1, node2, weight, node2index):
 
 def main():
     """The main part of ProGENI"""
-    warnings.simplefilter('ignore',SparseEfficiencyWarning)
+    warnings.simplefilter('ignore', SparseEfficiencyWarning)
     ###############################################################################
     args = parse_args()
-    
+
     n_rcg = args.num_RCG
     restart_prob_trans = args.prob_restart_trans
     restart_prob = args.prob_restart_rank
@@ -302,12 +302,12 @@ def main():
     expr_df = pd.read_csv(address_expr, sep=',', header=0, index_col=0).T
     delimiter_net = ','
     (node_names, net_df, node1, node2, weight) = import_network(address_net, delimiter_net)
-    
+
     ###############################################################################
     # Reorder gene column names of expression spreadsheet and gene node names of network
     # such that both name lists start with the intersection of the two list ordered alphabetically
     (expr_df, node_names, nodes_genes_intersect) = spread_match_network(expr_df, node_names)
-    
+
     expr_all = zscore(expr_df.values, axis=0)
     gene_names = list(expr_df.columns.values)
     if len(set(gene_names)) != len(gene_names):
@@ -317,43 +317,42 @@ def main():
     index2node = node_names.copy()
     #    index2gene = gene_names.copy()
     num_nodes = len(node_names)
-    
+    print('Number of genes in the expression file:', len(gene_names))
     ###############################################################################
     #Perform network transformation on the gene expression matrix
     (net_df, network_matrix) = \
         gen_network_matrix(num_nodes, net_df, node1, node2, weight, node2index)
     restart_matrix = np.eye(len(node_names), len(nodes_genes_intersect)).T
-    print('Obtaining the network')
+    print('Obtaining the network transformed gene expressions:')
     (num_iter, residual, gene_similarity_smooth) = \
         rwr_matrix(node_names, network_matrix, restart_matrix, restart_prob_trans, max_iter, tolerance)
     gene_similarity_smooth = gene_similarity_smooth[:, 0:np.size(gene_similarity_smooth, axis=0)]
     gene_similarity_smooth = normalize(gene_similarity_smooth, norm='l1', axis=1)
     expr_all = zscore(expr_all[:, 0:len(nodes_genes_intersect)].dot(gene_similarity_smooth.T), axis=0)
-    
-    
+
+
     ###############################################################################
     ###############################################################################
     response_df = pd.read_csv(address_response, sep=',', header=0, index_col=0).T
     response_all = response_df.values
     names_drug = list(response_df.columns.values)
     n_drug = len(names_drug)
-    
-    start = time.clock()
+
+    #start = time.clock()
     ranked_genes = {}       # Genes ranked such that the most important gene is first
     name_drug_final = []
     aggr_ranked_genes = {}
     # list of interest for drugs:
-    #drug_interest = set(names_drug)    #this option keeps all the drugs
-    drug_interest = set(['Cisplatin', 'Doxorubicin', '17-AAG'])
-    
-    
+    drug_interest = set(names_drug)
+
+
     #######################################################################
     #Obtain global equilibrium distribution of the nodes
     restart_vec = np.ones(len(node_names)) / len(node_names)
     (num_iter, residual, steady_prob_new_global) = \
         rwr_vec(node_names, network_matrix, restart_vec, restart_prob, max_iter, tolerance)
-    print(num_iter, residual)
-    
+    #print(num_iter, residual)
+
     for i_d in range(n_drug):
         if names_drug[i_d] not in drug_interest:
             continue
@@ -364,7 +363,7 @@ def main():
         y_response = y_response[label_not_nan]
         if len(y_response) < 2:
             continue
-    
+
         name_drug_final.append(names_drug[i_d])
         expr_matrix = expr_all[label_not_nan,]
         n_sample = len(label_not_nan)
@@ -374,8 +373,8 @@ def main():
         for k in range(n_boot):
             sample_permute = np.random.permutation(range(n_sample))
             label_train = sorted(sample_permute[np.arange(0, n_train)])
-            print('response =', names_drug[i_d], 'repeat =', k)
-    
+            print('response:', names_drug[i_d], 'bootstrap repeat:', k)
+
             y_train = y_response[label_train]
             expr_matrix_train = expr_matrix[label_train,]
             #######################################################################
@@ -395,26 +394,26 @@ def main():
                     restart_vec[node2index[gene_names[label_feat_seed[i]]]] = \
                         cor_all[label_feat_seed[i]]
             restart_vec /= restart_vec.sum()
-    
+
             (num_iter, residual, steady_prob_new_drug) = \
                 rwr_vec(node_names, network_matrix, restart_vec,
                         restart_prob, max_iter, tolerance)
-            print('RWR iterations =', num_iter, 'Residual = ', residual)
+            #print('RWR iterations =', num_iter, 'Residual = ', residual)
             steady_prob_new = steady_prob_new_drug - steady_prob_new_global
             ranked_nodes = np.argsort(steady_prob_new)[::-1]     #indices sorted high prob to low
             #Ranked gene names with the same order as above line except that
             #it removes genes not in the gene expression dataset
             ranked_names = [index2node[i] for i in ranked_nodes if index2node[i] in gene_names]
-    
+
             ranked_genes[names_drug[i_d]].append(ranked_names)
-        
+
         aggr_ranked_genes[names_drug[i_d]] = \
             rank_aggregate_borda(ranked_genes[names_drug[i_d]], 'geometric_mean')
         aggr_ranked_genes_df = pd.DataFrame(data=aggr_ranked_genes, index=None, columns=drug_interest)
         aggr_ranked_genes_df.to_csv(address_out, sep=',')
 
-    end_alg = time.clock()
-    print(end_alg-start)
+    #end_alg = time.clock()
+    #print(end_alg-start)
 
 
 
