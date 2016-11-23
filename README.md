@@ -22,7 +22,7 @@ Instead of installing all these libraries independently, you can use prebulit Py
 
 # Input files
 
-ProGENI requires three files as input:
+### Description of required inputs:
 #### Gene expression (features) file:
 This is a genes x samples csv file where the first column contains name of genes and the first row contains name/IDs of the samples. ProGENI assumes that the expression of each gene (across all samples) follows a normal distribution. As a result, we recommend you perform proper transformation on your expression data (e.g. log2 transform on microarray data) to satsify this condition for best results. NAs are not allowed in this file. 
 
@@ -63,6 +63,8 @@ Example network edge file:
 | G2 | G7 | 131 |
 | G4 | G5 | 444 |
 
+### Sample inputs and outputs:
+To test whether ProGENI runs as expected on your machine, you can use the sample inputs in the folder "sample_data" and run ProGENI with default settings and compare the results with the file "results_sample.csv" in the same folder. Please ntoe that the datasets (including the network) used in the mansucript are publically available (see the accompanying paper for more details). 
 
 # Running ProGENI
 ### With default settings
