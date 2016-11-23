@@ -1,5 +1,6 @@
 # *ProGENI* - Prioritization of Genes Enhanced with Network Information
 #### Amin Emad
+#### emad2 at illinois dot edu
 #### KnowEnG BD2K Center of Excellence
 #### University of Illinois Urbana-Champaign
 
