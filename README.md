@@ -90,3 +90,8 @@ In addition to the positional arguemtns, one can use the following optional argu
 - -mi, --max_iteration (integer, default=100): maximum number of iterations used in RWR
 - -nb, --num_bootstrap (integer, default=1): number of bootstrap samplings
 - -pb, --percent_bootstrap (integer, default=100): percent of samples for bootstrap sampling (between 0-100)
+
+For example, to run Robust-ProGENI with 80% bootstrap sampling and 50 times repeat and save the results in a file called "results_80_50.csv" one can use the following line:
+```
+python3 ProGENI.py gene_expr.csv phenotype.csv network.csv -o results_80_50.csv -nb 50 -pb 80
+```
