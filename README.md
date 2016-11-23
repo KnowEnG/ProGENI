@@ -79,14 +79,11 @@ python3 ProGENI.py gene_expr.csv phenotype.csv network.csv
 In addition to the positional arguemtns, one can use the following optional arguments to change the default settings.
 - -s, --seed (integer, default=1011): the seed for the pseudo random generator used in bootstrap sampling
 - -nr, --num_RCG (integer, default=100): number of genes in the response-correlated gene (RCG) set
-- -pt, --prob_restart_trans (float, default=0.5): restart probability of RWR to network-transform expression
+- -pt, --prob_restart_trans (float, default=0.5): restart probability of RWR to network-transform gene expression
+- -pr, --prob_restart_rank (float, default=0.5): restart probability for RWR used to rank nodes w.r.t. RCG
+- -t, --tolerance (float, default=1e-8): residual tolerance used to determine convergence of RWR
+- -mi, --max_iteration (integer, default=100): maximum number of iterations used in RWR
 
-    parser.add_argument('-pr', '--prob_restart_rank', type=float, default=0.5,
-                        help='restart probability for RWR used to rank nodes w.r.t. RCG')
-    parser.add_argument('-t', '--tolerance', type=float, default=1e-8,
-                        help='tolerance used to determine convergence of RWR')
-    parser.add_argument('-mi', '--max_iteration', type=int, default=100,
-                        help='maximum number of iterations used in RWR')
     parser.add_argument('-nb', '--num_bootstrap', type=int, default=1,
                         help='number of bootstrap samplings')
     parser.add_argument('-pb', '--percent_bootstrap', type=int, default=100,
