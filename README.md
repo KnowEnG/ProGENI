@@ -76,3 +76,35 @@ python3 ProGENI.py gene_expr.csv phenotype.csv network.csv
 ```
 
 ### With advanced settings
+In addition to the positional arguemtns, one can use the following optional arguments to change the default settings.
+- -s, --seed (integer, default=1011): the seed for the pseudo random generator used in bootstrap sampling
+- 
+    parser.add_argument('-nr', '--num_RCG', type=int, default=100,
+                        help='number of genes in the response-correlated gene (RCG) set')
+    parser.add_argument('-pt', '--prob_restart_trans', type=float, default=0.5,
+                        help='restart probability of RWR to network-transform expression')
+    parser.add_argument('-pr', '--prob_restart_rank', type=float, default=0.5,
+                        help='restart probability for RWR used to rank nodes w.r.t. RCG')
+    parser.add_argument('-t', '--tolerance', type=float, default=1e-8,
+                        help='tolerance used to determine convergence of RWR')
+    parser.add_argument('-mi', '--max_iteration', type=int, default=100,
+                        help='maximum number of iterations used in RWR')
+    parser.add_argument('-nb', '--num_bootstrap', type=int, default=1,
+                        help='number of bootstrap samplings')
+    parser.add_argument('-pb', '--percent_bootstrap', type=int, default=100,
+                        help='percent of samples for bootstrap samplinga (between 0-100)')
+    parser.add_argument('-de', '--directory_expression', type=str,
+                        default='./',
+                        help='directory containing expression data')
+    parser.add_argument('-dr', '--directory_response', type=str,
+                        default='./',
+                        help='directory containing response data')
+    parser.add_argument('-dn', '--directory_network', type=str,
+                        default='./',
+                        help='directory containing network data')
+    parser.add_argument('-do', '--directory_out', type=str,
+                        default='./',
+                        help='directory for the results')
+    parser.add_argument('-o', '--output', type=str,
+                        default='results.csv',
+                        help='name of the file containg the results')
