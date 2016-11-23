@@ -70,36 +70,23 @@ There are only 3 required (positional) arguments that needs to be specified by t
 - input_expression: name of the csv file containing the gene expression data
 - input_response: name of the csv file containing the phenotype data
 - input_network: name of the csv file containing the network edges
-By default, ProGENI assumes that all these files are located in the current directory. Given these arguments, one can run ProGENI with default settings. The following line shows how to run ProGENI:
+By default, ProGENI assumes that all these files are located in the current directory. Given these arguments, one can run ProGENI with default settings. The results will be saved in a file called "results.csv" in the current directory, which contains the ranked list of genes for each response. Only genes shared between the network and gene expression data will be included in the results. The following line shows how to run ProGENI:
 ```
 python3 ProGENI.py gene_expr.csv phenotype.csv network.csv
 ```
 
 ### With advanced settings
 In addition to the positional arguemtns, one can use the following optional arguments to change the default settings.
+- -o, --output (string, default='results.csv'): name of the file containg the results
+- -do, --directory_out (string, default='./'): directory for the results
+- -de, --directory_expression (string, default='./'): directory containing the gene expression file
+- -dr, --directory_response (string, default='./'): directory containing the response file
+- -dn --directory_network (string, default='./'): directory containing the network file
 - -s, --seed (integer, default=1011): the seed for the pseudo random generator used in bootstrap sampling
 - -nr, --num_RCG (integer, default=100): number of genes in the response-correlated gene (RCG) set
 - -pt, --prob_restart_trans (float, default=0.5): restart probability of RWR to network-transform gene expression
 - -pr, --prob_restart_rank (float, default=0.5): restart probability for RWR used to rank nodes w.r.t. RCG
 - -t, --tolerance (float, default=1e-8): residual tolerance used to determine convergence of RWR
 - -mi, --max_iteration (integer, default=100): maximum number of iterations used in RWR
-
-    parser.add_argument('-nb', '--num_bootstrap', type=int, default=1,
-                        help='number of bootstrap samplings')
-    parser.add_argument('-pb', '--percent_bootstrap', type=int, default=100,
-                        help='percent of samples for bootstrap samplinga (between 0-100)')
-    parser.add_argument('-de', '--directory_expression', type=str,
-                        default='./',
-                        help='directory containing expression data')
-    parser.add_argument('-dr', '--directory_response', type=str,
-                        default='./',
-                        help='directory containing response data')
-    parser.add_argument('-dn', '--directory_network', type=str,
-                        default='./',
-                        help='directory containing network data')
-    parser.add_argument('-do', '--directory_out', type=str,
-                        default='./',
-                        help='directory for the results')
-    parser.add_argument('-o', '--output', type=str,
-                        default='results.csv',
-                        help='name of the file containg the results')
+- -nb, --num_bootstrap (integer, default=1): number of bootstrap samplings
+- -pb, --percent_bootstrap (integer, default=100): percent of samples for bootstrap samplinga (between 0-100)
