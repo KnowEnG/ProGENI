@@ -89,4 +89,4 @@ In addition to the positional arguemtns, one can use the following optional argu
 - -t, --tolerance (float, default=1e-8): residual tolerance used to determine convergence of RWR
 - -mi, --max_iteration (integer, default=100): maximum number of iterations used in RWR
 - -nb, --num_bootstrap (integer, default=1): number of bootstrap samplings
-- -pb, --percent_bootstrap (integer, default=100): percent of samples for bootstrap samplinga (between 0-100)
+- -pb, --percent_bootstrap (integer, default=100): percent of samples for bootstrap sampling (between 0-100)
