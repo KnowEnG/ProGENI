@@ -66,6 +66,13 @@ Example network edge file:
 
 # Running ProGENI
 ### With default settings
-
+There are only 3 required (positional) arguments that needs to be specified by the user:
+- input_expression: name of the csv file containing the gene expression data
+- input_response: name of the csv file containing the phenotype data
+- input_network: name of the csv file containing the network edges
+By default, ProGENI assumes that all these files are located in the current directory. Given these arguments, one can run ProGENI with default settings. The following line shows how to run ProGENI:
+```
+python3 ProGENI.py gene_expr.csv phenotype.csv network.csv
+```
 
 ### With advanced settings
