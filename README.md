@@ -102,4 +102,5 @@ To test whether ProGENI runs as expected on your machine, you can use the sample
 python3 ProGENI.py gene_expr_sample.csv response_sample.csv network_sample.csv -nr 2
 ```
 # Running ProGENI_simplified
-This.
+ProGENI_simplified.py provides a simplified implementation of ProGENI. In this variation, the Pearson correlation coefficient of network transformed gene expressions and phenotype is used to rank the genes. In other words, the steps involving identification of a RCG set and ranking genes in the network with respect to the RCG are removed. 
+Usage of this variation is very similar to ProGENI.py, except that -nr and -pr do not need to be provided. 
