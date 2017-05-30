@@ -101,5 +101,5 @@ To test whether ProGENI runs as expected on your machine, you can use the sample
 ```
 python3 ProGENI.py gene_expr_sample.csv response_sample.csv network_sample.csv -nr 2
 ```
-
-Please note that the network used in the manuscript can be obtained from "9606.protein.links.detailed.v10.txt.gz" and downloaded from the [STRING database](http://string-db.org/cgi/download.pl?UserId=jQZ9rmKZ7UaW&sessionId=scBzK1XjdBol&species_text=Homo+sapiens). The gene expression and drug response datasets used in the mansucript are also publically available (see the accompanying paper for more details).
+# Running ProGENI_simplified
+This.
