@@ -102,7 +102,7 @@ python3 ProGENI.py gene_expr.csv phenotype.csv network.csv -o results_80_50.csv 
 ### Sample inputs and outputs:
 To test whether ProGENI runs as expected on your machine, you can use the sample inputs in the folder "sample_data" and run ProGENI with num_RCG=2 and other arguments set with default values. The results should match the file "results_sample.csv".
 ```
-python3 ProGENI.py gene_expr_sample.csv response_sample.csv network_sample.csv -nr 2
+python3 ProGENI.py sample_data/gene_expr_sample.csv sample_data/response_sample.csv sample_data/network_sample.csv -nr 2
 ```
 # Running ProGENI_simplified
 ProGENI_simplified.py provides a simplified implementation of ProGENI. In this variation, the Pearson correlation coefficient of network transformed gene expressions and phenotype is used to rank the genes. In other words, the steps involving identification of a RCG set and ranking genes in the network with respect to the RCG are removed. This method is called "ProGENI-PCC" in the manuscript. 
